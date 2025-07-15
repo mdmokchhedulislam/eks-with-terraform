@@ -14,3 +14,10 @@ module "vpc" {
   public_route_cidr = var.public_route_cidr
 
 }
+
+
+module "eks" {
+  source = "./modules/eks"
+  subnet_ids = [ module.vpc.public_subnet_id]
+  
+}
