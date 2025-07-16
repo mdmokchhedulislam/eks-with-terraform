@@ -83,6 +83,41 @@ resource "aws_iam_role_policy_attachment" "AmazonEKS_CNI_Policy" {
 }
 
 
+resource "aws_security_group" "worker_sg" {
+  name        = "eks-worker-sg"
+  description = "Allow worker node communication"
+  vpc_id      = aws_vpc.main.id
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] 
+  }
+
+  ingress {
+    from_port       = 80
+    to_port         = 80
+    protocol        = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] 
+  }
+
+  ingress {
+    from_port       = 443
+    to_port         = 443
+    protocol        = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] 
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+
 
 resource "aws_eks_node_group" "worker_node" {
   cluster_name    = aws_eks_cluster.controller.name
@@ -98,6 +133,11 @@ resource "aws_eks_node_group" "worker_node" {
 
   update_config {
     max_unavailable = 1
+  }
+
+  remote_access {
+    source_security_group_ids = [aws_security_group.worker_sg.id]
+    
   }
 
   depends_on = [
