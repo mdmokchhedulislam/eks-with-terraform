@@ -84,10 +84,6 @@ resource "aws_iam_role_policy_attachment" "AmazonEKS_CNI_Policy" {
 
 
 
-
-
-
-
 resource "aws_eks_node_group" "worker_node" {
   cluster_name    = aws_eks_cluster.controller.name
   node_group_name = "worker"

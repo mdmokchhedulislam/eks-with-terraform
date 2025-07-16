@@ -1,4 +1,38 @@
 
+resource "aws_s3_bucket" "backend_bucket" {
+  bucket = "terraform-backend-bucket-tfstate"
+
+  tags = {
+    Name        = "store_bucket"
+
+  }
+}
+
+resource "aws_dynamodb_table" "locking_dynamodb" {
+  name             = "terraform_locking"
+  hash_key         = "LockID"
+  billing_mode     = "PAY_PER_REQUEST"
+
+  attribute {
+    name = "LockID"
+    type = "S"
+  }
+
+ 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 module "vpc" {
