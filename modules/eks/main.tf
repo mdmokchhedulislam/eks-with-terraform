@@ -50,7 +50,7 @@ resource "aws_eks_cluster" "controller" {
 
 
 resource "aws_iam_role" "node_role" {
-  name = var.cluster_role_name
+  name = var.node_role_name
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -59,7 +59,7 @@ resource "aws_iam_role" "node_role" {
         Effect = "Allow"
         Sid    = ""
         Principal = {
-          Service = "eks.amazonaws.com"
+          Service = "ec2.amazonaws.com"
         }
       },
     ]
@@ -69,12 +69,12 @@ resource "aws_iam_role" "node_role" {
 
 resource "aws_iam_role_policy_attachment" "AmazonEKSWorkerNodePolicy" {
   role       = aws_iam_role.node_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy "
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
 }
 
 resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerRegistryReadOnly" {
   role       = aws_iam_role.node_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly  "
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
 }
 
 resource "aws_iam_role_policy_attachment" "AmazonEKS_CNI_Policy" {
